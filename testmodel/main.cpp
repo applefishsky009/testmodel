@@ -79,6 +79,15 @@ int main() {
 	}
 	cout << "********************" << endl;
 	int kkk = 0;
+	// 读取网络指定feature层数据 blobs
+	{
+		char *query_blob_name = "conv1";
+		unsigned int blob_id = get_blob_index(net, query_blob_name);
+		boost::shared_ptr<Blob<float>>  blob = net->blobs()[blob_id];
+		unsigned int num_data = blob->count();	// 
+		const float *blob_ptr = (const float *)blob->cpu_data();
+	}
+
 	// 指定layer的权重数据
 	// !Note:不同于Net的Blob是Feature Maps, Layer的Blob是指Conv和FC等层的weight和Bias
 	{
