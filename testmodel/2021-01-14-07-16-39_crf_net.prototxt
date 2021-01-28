@@ -1,0 +1,1800 @@
+layer {
+  name: "input_1"
+  type: "Input"
+  top: "input_1"
+  input_param {
+    shape {
+      dim: 1
+      dim: 5
+      dim: 384
+      dim: 640
+    }
+  }
+}
+layer {
+  name: "image_channels"
+  type: "Slice"
+  bottom: "input_1"
+  top: "image_channels"
+  top: "radar_channels"
+  slice_param {
+    slice_point: 3
+    axis: 1
+  }
+}
+layer {
+  name: "concat_0"
+  type: "Concat"
+  bottom: "image_channels"
+  bottom: "radar_channels"
+  top: "concat_0"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name: "block1_conv1"
+  type: "Convolution"
+  bottom: "concat_0"
+  top: "block1_conv1"
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "block1_conv1s"
+  type: "ReLU"
+  bottom: "block1_conv1"
+  top: "block1_conv1"
+}
+layer {
+  name: "block1_conv2"
+  type: "Convolution"
+  bottom: "block1_conv1"
+  top: "block1_conv2"
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "block1_conv2s"
+  type: "ReLU"
+  bottom: "block1_conv2"
+  top: "block1_conv2"
+}
+layer {
+  name: "block1_pool"
+  type: "Pooling"
+  bottom: "block1_conv2"
+  top: "block1_pool"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "rad_block1_pool"
+  type: "Pooling"
+  bottom: "radar_channels"
+  top: "rad_block1_pool"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "concat_1"
+  type: "Concat"
+  bottom: "block1_pool"
+  bottom: "rad_block1_pool"
+  top: "concat_1"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name: "block2_conv1"
+  type: "Convolution"
+  bottom: "concat_1"
+  top: "block2_conv1"
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "block2_conv1s"
+  type: "ReLU"
+  bottom: "block2_conv1"
+  top: "block2_conv1"
+}
+layer {
+  name: "block2_conv2"
+  type: "Convolution"
+  bottom: "block2_conv1"
+  top: "block2_conv2"
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "block2_conv2s"
+  type: "ReLU"
+  bottom: "block2_conv2"
+  top: "block2_conv2"
+}
+layer {
+  name: "block2_pool"
+  type: "Pooling"
+  bottom: "block2_conv2"
+  top: "block2_pool"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "rad_block2_pool"
+  type: "Pooling"
+  bottom: "rad_block1_pool"
+  top: "rad_block2_pool"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "concat_2"
+  type: "Concat"
+  bottom: "block2_pool"
+  bottom: "rad_block2_pool"
+  top: "concat_2"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name: "block3_conv1"
+  type: "Convolution"
+  bottom: "concat_2"
+  top: "block3_conv1"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "block3_conv1s"
+  type: "ReLU"
+  bottom: "block3_conv1"
+  top: "block3_conv1"
+}
+layer {
+  name: "block3_conv2"
+  type: "Convolution"
+  bottom: "block3_conv1"
+  top: "block3_conv2"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "block3_conv2s"
+  type: "ReLU"
+  bottom: "block3_conv2"
+  top: "block3_conv2"
+}
+layer {
+  name: "block3_conv3"
+  type: "Convolution"
+  bottom: "block3_conv2"
+  top: "block3_conv3"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "block3_conv3s"
+  type: "ReLU"
+  bottom: "block3_conv3"
+  top: "block3_conv3"
+}
+layer {
+  name: "block3_pool"
+  type: "Pooling"
+  bottom: "block3_conv3"
+  top: "block3_pool"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "rad_block3_pool"
+  type: "Pooling"
+  bottom: "rad_block2_pool"
+  top: "rad_block3_pool"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "concat_3"
+  type: "Concat"
+  bottom: "block3_pool"
+  bottom: "rad_block3_pool"
+  top: "concat_3"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name: "block4_conv1"
+  type: "Convolution"
+  bottom: "concat_3"
+  top: "block4_conv1"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "block4_conv1s"
+  type: "ReLU"
+  bottom: "block4_conv1"
+  top: "block4_conv1"
+}
+layer {
+  name: "block4_conv2"
+  type: "Convolution"
+  bottom: "block4_conv1"
+  top: "block4_conv2"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "block4_conv2s"
+  type: "ReLU"
+  bottom: "block4_conv2"
+  top: "block4_conv2"
+}
+layer {
+  name: "block4_conv3"
+  type: "Convolution"
+  bottom: "block4_conv2"
+  top: "block4_conv3"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "block4_conv3s"
+  type: "ReLU"
+  bottom: "block4_conv3"
+  top: "block4_conv3"
+}
+layer {
+  name: "block4_pool"
+  type: "Pooling"
+  bottom: "block4_conv3"
+  top: "block4_pool"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "rad_block4_pool"
+  type: "Pooling"
+  bottom: "rad_block3_pool"
+  top: "rad_block4_pool"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "concat_4"
+  type: "Concat"
+  bottom: "block4_pool"
+  bottom: "rad_block4_pool"
+  top: "concat_4"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name: "block5_conv1"
+  type: "Convolution"
+  bottom: "concat_4"
+  top: "block5_conv1"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "block5_conv1s"
+  type: "ReLU"
+  bottom: "block5_conv1"
+  top: "block5_conv1"
+}
+layer {
+  name: "block5_conv2"
+  type: "Convolution"
+  bottom: "block5_conv1"
+  top: "block5_conv2"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "block5_conv2s"
+  type: "ReLU"
+  bottom: "block5_conv2"
+  top: "block5_conv2"
+}
+layer {
+  name: "block5_conv3"
+  type: "Convolution"
+  bottom: "block5_conv2"
+  top: "block5_conv3"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "block5_conv3s"
+  type: "ReLU"
+  bottom: "block5_conv3"
+  top: "block5_conv3"
+}
+layer {
+  name: "block5_pool"
+  type: "Pooling"
+  bottom: "block5_conv3"
+  top: "block5_pool"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "rad_block5_pool"
+  type: "Pooling"
+  bottom: "rad_block4_pool"
+  top: "rad_block5_pool"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "concat_5"
+  type: "Concat"
+  bottom: "block5_pool"
+  bottom: "rad_block5_pool"
+  top: "concat_5"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name: "C5_reduced"
+  type: "Convolution"
+  bottom: "concat_5"
+  top: "C5_reduced"
+  convolution_param {
+    num_output: 254
+    kernel_size: 1
+    stride: 1
+  }
+}
+layer {
+  name: "P5_upsampled"
+  type: "Deconvolution"
+  bottom: "C5_reduced"
+  top: "P5_upsampled"
+  param {
+    lr_mult: 0.0
+    decay_mult: 0.0
+  }
+  convolution_param {
+    num_output: 254
+    bias_term: true
+    pad: 0
+    kernel_size: 2
+    group: 1
+    stride: 2
+    weight_filler {
+      type: "bilinear"
+    }
+  }
+}
+layer {
+  name: "C4_reduced"
+  type: "Convolution"
+  bottom: "concat_4"
+  top: "C4_reduced"
+  convolution_param {
+    num_output: 254
+    kernel_size: 1
+    stride: 1
+  }
+}
+layer {
+  name: "P4_merged"
+  type: "Eltwise"
+  bottom: "P5_upsampled"
+  bottom: "C4_reduced"
+  top: "P4_merged"
+}
+layer {
+  name: "P4_upsampled"
+  type: "Deconvolution"
+  bottom: "P4_merged"
+  top: "P4_upsampled"
+  param {
+    lr_mult: 0.0
+    decay_mult: 0.0
+  }
+  convolution_param {
+    num_output: 254
+    bias_term: true
+    pad: 0
+    kernel_size: 2
+    group: 1
+    stride: 2
+    weight_filler {
+      type: "bilinear"
+    }
+  }
+}
+layer {
+  name: "C3_reduced"
+  type: "Convolution"
+  bottom: "concat_3"
+  top: "C3_reduced"
+  convolution_param {
+    num_output: 254
+    kernel_size: 1
+    stride: 1
+  }
+}
+layer {
+  name: "P6"
+  type: "Convolution"
+  bottom: "concat_5"
+  top: "P6"
+  convolution_param {
+    num_output: 254
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "P3_merged"
+  type: "Eltwise"
+  bottom: "P4_upsampled"
+  bottom: "C3_reduced"
+  top: "P3_merged"
+}
+layer {
+  name: "rad_block6_pool"
+  type: "Pooling"
+  bottom: "rad_block5_pool"
+  top: "rad_block6_pool"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "C6_relu"
+  type: "ReLU"
+  bottom: "P6"
+  top: "C6_relu"
+}
+layer {
+  name: "P3"
+  type: "Convolution"
+  bottom: "P3_merged"
+  top: "P3"
+  convolution_param {
+    num_output: 254
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "P4"
+  type: "Convolution"
+  bottom: "P4_merged"
+  top: "P4"
+  convolution_param {
+    num_output: 254
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "P5"
+  type: "Convolution"
+  bottom: "C5_reduced"
+  top: "P5"
+  convolution_param {
+    num_output: 254
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "P7"
+  type: "Convolution"
+  bottom: "C6_relu"
+  top: "P7"
+  convolution_param {
+    num_output: 254
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "rad_block7_pool"
+  type: "Pooling"
+  bottom: "rad_block6_pool"
+  top: "rad_block7_pool"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "P3_rad"
+  type: "Concat"
+  bottom: "P3"
+  bottom: "rad_block3_pool"
+  top: "P3_rad"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name: "P4_rad"
+  type: "Concat"
+  bottom: "P4"
+  bottom: "rad_block4_pool"
+  top: "P4_rad"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name: "P5_rad"
+  type: "Concat"
+  bottom: "P5"
+  bottom: "rad_block5_pool"
+  top: "P5_rad"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name: "P6_rad"
+  type: "Concat"
+  bottom: "P6"
+  bottom: "rad_block6_pool"
+  top: "P6_rad"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name: "P7_rad"
+  type: "Concat"
+  bottom: "P7"
+  bottom: "rad_block7_pool"
+  top: "P7_rad"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name: "regression_submodel/pyramid_regression_0"
+  type: "Convolution"
+  bottom: "P3_rad"
+  top: "regression_submodel/pyramid_regression_0"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel/pyramid_regression_0s"
+  type: "ReLU"
+  bottom: "regression_submodel/pyramid_regression_0"
+  top: "regression_submodel/pyramid_regression_0"
+}
+layer {
+  name: "regression_submodel_1/pyramid_regression_0"
+  type: "Convolution"
+  bottom: "P4_rad"
+  top: "regression_submodel_1/pyramid_regression_0"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_1/pyramid_regression_0s"
+  type: "ReLU"
+  bottom: "regression_submodel_1/pyramid_regression_0"
+  top: "regression_submodel_1/pyramid_regression_0"
+}
+layer {
+  name: "regression_submodel_2/pyramid_regression_0"
+  type: "Convolution"
+  bottom: "P5_rad"
+  top: "regression_submodel_2/pyramid_regression_0"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_2/pyramid_regression_0s"
+  type: "ReLU"
+  bottom: "regression_submodel_2/pyramid_regression_0"
+  top: "regression_submodel_2/pyramid_regression_0"
+}
+layer {
+  name: "regression_submodel_3/pyramid_regression_0"
+  type: "Convolution"
+  bottom: "P6_rad"
+  top: "regression_submodel_3/pyramid_regression_0"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_3/pyramid_regression_0s"
+  type: "ReLU"
+  bottom: "regression_submodel_3/pyramid_regression_0"
+  top: "regression_submodel_3/pyramid_regression_0"
+}
+layer {
+  name: "regression_submodel_4/pyramid_regression_0"
+  type: "Convolution"
+  bottom: "P7_rad"
+  top: "regression_submodel_4/pyramid_regression_0"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_4/pyramid_regression_0s"
+  type: "ReLU"
+  bottom: "regression_submodel_4/pyramid_regression_0"
+  top: "regression_submodel_4/pyramid_regression_0"
+}
+layer {
+  name: "regression_submodel/pyramid_regression_1"
+  type: "Convolution"
+  bottom: "regression_submodel/pyramid_regression_0"
+  top: "regression_submodel/pyramid_regression_1"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel/pyramid_regression_1s"
+  type: "ReLU"
+  bottom: "regression_submodel/pyramid_regression_1"
+  top: "regression_submodel/pyramid_regression_1"
+}
+layer {
+  name: "regression_submodel_1/pyramid_regression_1"
+  type: "Convolution"
+  bottom: "regression_submodel_1/pyramid_regression_0"
+  top: "regression_submodel_1/pyramid_regression_1"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_1/pyramid_regression_1s"
+  type: "ReLU"
+  bottom: "regression_submodel_1/pyramid_regression_1"
+  top: "regression_submodel_1/pyramid_regression_1"
+}
+layer {
+  name: "regression_submodel_2/pyramid_regression_1"
+  type: "Convolution"
+  bottom: "regression_submodel_2/pyramid_regression_0"
+  top: "regression_submodel_2/pyramid_regression_1"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_2/pyramid_regression_1s"
+  type: "ReLU"
+  bottom: "regression_submodel_2/pyramid_regression_1"
+  top: "regression_submodel_2/pyramid_regression_1"
+}
+layer {
+  name: "regression_submodel_3/pyramid_regression_1"
+  type: "Convolution"
+  bottom: "regression_submodel_3/pyramid_regression_0"
+  top: "regression_submodel_3/pyramid_regression_1"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_3/pyramid_regression_1s"
+  type: "ReLU"
+  bottom: "regression_submodel_3/pyramid_regression_1"
+  top: "regression_submodel_3/pyramid_regression_1"
+}
+layer {
+  name: "regression_submodel_4/pyramid_regression_1"
+  type: "Convolution"
+  bottom: "regression_submodel_4/pyramid_regression_0"
+  top: "regression_submodel_4/pyramid_regression_1"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_4/pyramid_regression_1s"
+  type: "ReLU"
+  bottom: "regression_submodel_4/pyramid_regression_1"
+  top: "regression_submodel_4/pyramid_regression_1"
+}
+layer {
+  name: "regression_submodel/pyramid_regression_2"
+  type: "Convolution"
+  bottom: "regression_submodel/pyramid_regression_1"
+  top: "regression_submodel/pyramid_regression_2"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel/pyramid_regression_2s"
+  type: "ReLU"
+  bottom: "regression_submodel/pyramid_regression_2"
+  top: "regression_submodel/pyramid_regression_2"
+}
+layer {
+  name: "regression_submodel_1/pyramid_regression_2"
+  type: "Convolution"
+  bottom: "regression_submodel_1/pyramid_regression_1"
+  top: "regression_submodel_1/pyramid_regression_2"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_1/pyramid_regression_2s"
+  type: "ReLU"
+  bottom: "regression_submodel_1/pyramid_regression_2"
+  top: "regression_submodel_1/pyramid_regression_2"
+}
+layer {
+  name: "regression_submodel_2/pyramid_regression_2"
+  type: "Convolution"
+  bottom: "regression_submodel_2/pyramid_regression_1"
+  top: "regression_submodel_2/pyramid_regression_2"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_2/pyramid_regression_2s"
+  type: "ReLU"
+  bottom: "regression_submodel_2/pyramid_regression_2"
+  top: "regression_submodel_2/pyramid_regression_2"
+}
+layer {
+  name: "regression_submodel_3/pyramid_regression_2"
+  type: "Convolution"
+  bottom: "regression_submodel_3/pyramid_regression_1"
+  top: "regression_submodel_3/pyramid_regression_2"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_3/pyramid_regression_2s"
+  type: "ReLU"
+  bottom: "regression_submodel_3/pyramid_regression_2"
+  top: "regression_submodel_3/pyramid_regression_2"
+}
+layer {
+  name: "regression_submodel_4/pyramid_regression_2"
+  type: "Convolution"
+  bottom: "regression_submodel_4/pyramid_regression_1"
+  top: "regression_submodel_4/pyramid_regression_2"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_4/pyramid_regression_2s"
+  type: "ReLU"
+  bottom: "regression_submodel_4/pyramid_regression_2"
+  top: "regression_submodel_4/pyramid_regression_2"
+}
+layer {
+  name: "regression_submodel/pyramid_regression_3"
+  type: "Convolution"
+  bottom: "regression_submodel/pyramid_regression_2"
+  top: "regression_submodel/pyramid_regression_3"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel/pyramid_regression_3s"
+  type: "ReLU"
+  bottom: "regression_submodel/pyramid_regression_3"
+  top: "regression_submodel/pyramid_regression_3"
+}
+layer {
+  name: "regression_submodel_1/pyramid_regression_3"
+  type: "Convolution"
+  bottom: "regression_submodel_1/pyramid_regression_2"
+  top: "regression_submodel_1/pyramid_regression_3"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_1/pyramid_regression_3s"
+  type: "ReLU"
+  bottom: "regression_submodel_1/pyramid_regression_3"
+  top: "regression_submodel_1/pyramid_regression_3"
+}
+layer {
+  name: "regression_submodel_2/pyramid_regression_3"
+  type: "Convolution"
+  bottom: "regression_submodel_2/pyramid_regression_2"
+  top: "regression_submodel_2/pyramid_regression_3"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_2/pyramid_regression_3s"
+  type: "ReLU"
+  bottom: "regression_submodel_2/pyramid_regression_3"
+  top: "regression_submodel_2/pyramid_regression_3"
+}
+layer {
+  name: "regression_submodel_3/pyramid_regression_3"
+  type: "Convolution"
+  bottom: "regression_submodel_3/pyramid_regression_2"
+  top: "regression_submodel_3/pyramid_regression_3"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_3/pyramid_regression_3s"
+  type: "ReLU"
+  bottom: "regression_submodel_3/pyramid_regression_3"
+  top: "regression_submodel_3/pyramid_regression_3"
+}
+layer {
+  name: "regression_submodel_4/pyramid_regression_3"
+  type: "Convolution"
+  bottom: "regression_submodel_4/pyramid_regression_2"
+  top: "regression_submodel_4/pyramid_regression_3"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_4/pyramid_regression_3s"
+  type: "ReLU"
+  bottom: "regression_submodel_4/pyramid_regression_3"
+  top: "regression_submodel_4/pyramid_regression_3"
+}
+layer {
+  name: "regression_submodel/pyramid_regression"
+  type: "Convolution"
+  bottom: "regression_submodel/pyramid_regression_3"
+  top: "regression_submodel/pyramid_regression"
+  convolution_param {
+    num_output: 36
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_1/pyramid_regression"
+  type: "Convolution"
+  bottom: "regression_submodel_1/pyramid_regression_3"
+  top: "regression_submodel_1/pyramid_regression"
+  convolution_param {
+    num_output: 36
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_2/pyramid_regression"
+  type: "Convolution"
+  bottom: "regression_submodel_2/pyramid_regression_3"
+  top: "regression_submodel_2/pyramid_regression"
+  convolution_param {
+    num_output: 36
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_3/pyramid_regression"
+  type: "Convolution"
+  bottom: "regression_submodel_3/pyramid_regression_3"
+  top: "regression_submodel_3/pyramid_regression"
+  convolution_param {
+    num_output: 36
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel_4/pyramid_regression"
+  type: "Convolution"
+  bottom: "regression_submodel_4/pyramid_regression_3"
+  top: "regression_submodel_4/pyramid_regression"
+  convolution_param {
+    num_output: 36
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "regression_submodel/pyramid_regression_permute"
+  type: "Permute"
+  bottom: "regression_submodel/pyramid_regression"
+  top: "regression_submodel/pyramid_regression_permute"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "regression_submodel/pyramid_regression_reshape"
+  type: "Reshape"
+  bottom: "regression_submodel/pyramid_regression_permute"
+  top: "regression_submodel/pyramid_regression_reshape"
+  reshape_param {
+    shape {
+      dim: 0
+      dim: -1
+      dim: 4
+    }
+  }
+}
+layer {
+  name: "regression_submodel_1/pyramid_regression_permute"
+  type: "Permute"
+  bottom: "regression_submodel_1/pyramid_regression"
+  top: "regression_submodel_1/pyramid_regression_permute"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "regression_submodel_1/pyramid_regression_reshape"
+  type: "Reshape"
+  bottom: "regression_submodel_1/pyramid_regression_permute"
+  top: "regression_submodel_1/pyramid_regression_reshape"
+  reshape_param {
+    shape {
+      dim: 0
+      dim: -1
+      dim: 4
+    }
+  }
+}
+layer {
+  name: "regression_submodel_2/pyramid_regression_permute"
+  type: "Permute"
+  bottom: "regression_submodel_2/pyramid_regression"
+  top: "regression_submodel_2/pyramid_regression_permute"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "regression_submodel_2/pyramid_regression_reshape"
+  type: "Reshape"
+  bottom: "regression_submodel_2/pyramid_regression_permute"
+  top: "regression_submodel_2/pyramid_regression_reshape"
+  reshape_param {
+    shape {
+      dim: 0
+      dim: -1
+      dim: 4
+    }
+  }
+}
+layer {
+  name: "regression_submodel_3/pyramid_regression_permute"
+  type: "Permute"
+  bottom: "regression_submodel_3/pyramid_regression"
+  top: "regression_submodel_3/pyramid_regression_permute"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "regression_submodel_3/pyramid_regression_reshape"
+  type: "Reshape"
+  bottom: "regression_submodel_3/pyramid_regression_permute"
+  top: "regression_submodel_3/pyramid_regression_reshape"
+  reshape_param {
+    shape {
+      dim: 0
+      dim: -1
+      dim: 4
+    }
+  }
+}
+layer {
+  name: "regression_submodel_4/pyramid_regression_permute"
+  type: "Permute"
+  bottom: "regression_submodel_4/pyramid_regression"
+  top: "regression_submodel_4/pyramid_regression_permute"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "regression_submodel_4/pyramid_regression_reshape"
+  type: "Reshape"
+  bottom: "regression_submodel_4/pyramid_regression_permute"
+  top: "regression_submodel_4/pyramid_regression_reshape"
+  reshape_param {
+    shape {
+      dim: 0
+      dim: -1
+      dim: 4
+    }
+  }
+}
+layer {
+  name: "classification_submodel/pyramid_classification_0"
+  type: "Convolution"
+  bottom: "P3_rad"
+  top: "classification_submodel/pyramid_classification_0"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel/pyramid_classification_0s"
+  type: "ReLU"
+  bottom: "classification_submodel/pyramid_classification_0"
+  top: "classification_submodel/pyramid_classification_0"
+}
+layer {
+  name: "classification_submodel_1/pyramid_classification_0"
+  type: "Convolution"
+  bottom: "P4_rad"
+  top: "classification_submodel_1/pyramid_classification_0"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_1/pyramid_classification_0s"
+  type: "ReLU"
+  bottom: "classification_submodel_1/pyramid_classification_0"
+  top: "classification_submodel_1/pyramid_classification_0"
+}
+layer {
+  name: "classification_submodel_2/pyramid_classification_0"
+  type: "Convolution"
+  bottom: "P5_rad"
+  top: "classification_submodel_2/pyramid_classification_0"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_2/pyramid_classification_0s"
+  type: "ReLU"
+  bottom: "classification_submodel_2/pyramid_classification_0"
+  top: "classification_submodel_2/pyramid_classification_0"
+}
+layer {
+  name: "classification_submodel_3/pyramid_classification_0"
+  type: "Convolution"
+  bottom: "P6_rad"
+  top: "classification_submodel_3/pyramid_classification_0"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_3/pyramid_classification_0s"
+  type: "ReLU"
+  bottom: "classification_submodel_3/pyramid_classification_0"
+  top: "classification_submodel_3/pyramid_classification_0"
+}
+layer {
+  name: "classification_submodel_4/pyramid_classification_0"
+  type: "Convolution"
+  bottom: "P7_rad"
+  top: "classification_submodel_4/pyramid_classification_0"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_4/pyramid_classification_0s"
+  type: "ReLU"
+  bottom: "classification_submodel_4/pyramid_classification_0"
+  top: "classification_submodel_4/pyramid_classification_0"
+}
+layer {
+  name: "classification_submodel/pyramid_classification_1"
+  type: "Convolution"
+  bottom: "classification_submodel/pyramid_classification_0"
+  top: "classification_submodel/pyramid_classification_1"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel/pyramid_classification_1s"
+  type: "ReLU"
+  bottom: "classification_submodel/pyramid_classification_1"
+  top: "classification_submodel/pyramid_classification_1"
+}
+layer {
+  name: "classification_submodel_1/pyramid_classification_1"
+  type: "Convolution"
+  bottom: "classification_submodel_1/pyramid_classification_0"
+  top: "classification_submodel_1/pyramid_classification_1"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_1/pyramid_classification_1s"
+  type: "ReLU"
+  bottom: "classification_submodel_1/pyramid_classification_1"
+  top: "classification_submodel_1/pyramid_classification_1"
+}
+layer {
+  name: "classification_submodel_2/pyramid_classification_1"
+  type: "Convolution"
+  bottom: "classification_submodel_2/pyramid_classification_0"
+  top: "classification_submodel_2/pyramid_classification_1"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_2/pyramid_classification_1s"
+  type: "ReLU"
+  bottom: "classification_submodel_2/pyramid_classification_1"
+  top: "classification_submodel_2/pyramid_classification_1"
+}
+layer {
+  name: "classification_submodel_3/pyramid_classification_1"
+  type: "Convolution"
+  bottom: "classification_submodel_3/pyramid_classification_0"
+  top: "classification_submodel_3/pyramid_classification_1"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_3/pyramid_classification_1s"
+  type: "ReLU"
+  bottom: "classification_submodel_3/pyramid_classification_1"
+  top: "classification_submodel_3/pyramid_classification_1"
+}
+layer {
+  name: "classification_submodel_4/pyramid_classification_1"
+  type: "Convolution"
+  bottom: "classification_submodel_4/pyramid_classification_0"
+  top: "classification_submodel_4/pyramid_classification_1"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_4/pyramid_classification_1s"
+  type: "ReLU"
+  bottom: "classification_submodel_4/pyramid_classification_1"
+  top: "classification_submodel_4/pyramid_classification_1"
+}
+layer {
+  name: "classification_submodel/pyramid_classification_2"
+  type: "Convolution"
+  bottom: "classification_submodel/pyramid_classification_1"
+  top: "classification_submodel/pyramid_classification_2"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel/pyramid_classification_2s"
+  type: "ReLU"
+  bottom: "classification_submodel/pyramid_classification_2"
+  top: "classification_submodel/pyramid_classification_2"
+}
+layer {
+  name: "classification_submodel_1/pyramid_classification_2"
+  type: "Convolution"
+  bottom: "classification_submodel_1/pyramid_classification_1"
+  top: "classification_submodel_1/pyramid_classification_2"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_1/pyramid_classification_2s"
+  type: "ReLU"
+  bottom: "classification_submodel_1/pyramid_classification_2"
+  top: "classification_submodel_1/pyramid_classification_2"
+}
+layer {
+  name: "classification_submodel_2/pyramid_classification_2"
+  type: "Convolution"
+  bottom: "classification_submodel_2/pyramid_classification_1"
+  top: "classification_submodel_2/pyramid_classification_2"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_2/pyramid_classification_2s"
+  type: "ReLU"
+  bottom: "classification_submodel_2/pyramid_classification_2"
+  top: "classification_submodel_2/pyramid_classification_2"
+}
+layer {
+  name: "classification_submodel_3/pyramid_classification_2"
+  type: "Convolution"
+  bottom: "classification_submodel_3/pyramid_classification_1"
+  top: "classification_submodel_3/pyramid_classification_2"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_3/pyramid_classification_2s"
+  type: "ReLU"
+  bottom: "classification_submodel_3/pyramid_classification_2"
+  top: "classification_submodel_3/pyramid_classification_2"
+}
+layer {
+  name: "classification_submodel_4/pyramid_classification_2"
+  type: "Convolution"
+  bottom: "classification_submodel_4/pyramid_classification_1"
+  top: "classification_submodel_4/pyramid_classification_2"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_4/pyramid_classification_2s"
+  type: "ReLU"
+  bottom: "classification_submodel_4/pyramid_classification_2"
+  top: "classification_submodel_4/pyramid_classification_2"
+}
+layer {
+  name: "classification_submodel/pyramid_classification_3"
+  type: "Convolution"
+  bottom: "classification_submodel/pyramid_classification_2"
+  top: "classification_submodel/pyramid_classification_3"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel/pyramid_classification_3s"
+  type: "ReLU"
+  bottom: "classification_submodel/pyramid_classification_3"
+  top: "classification_submodel/pyramid_classification_3"
+}
+layer {
+  name: "classification_submodel_1/pyramid_classification_3"
+  type: "Convolution"
+  bottom: "classification_submodel_1/pyramid_classification_2"
+  top: "classification_submodel_1/pyramid_classification_3"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_1/pyramid_classification_3s"
+  type: "ReLU"
+  bottom: "classification_submodel_1/pyramid_classification_3"
+  top: "classification_submodel_1/pyramid_classification_3"
+}
+layer {
+  name: "classification_submodel_2/pyramid_classification_3"
+  type: "Convolution"
+  bottom: "classification_submodel_2/pyramid_classification_2"
+  top: "classification_submodel_2/pyramid_classification_3"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_2/pyramid_classification_3s"
+  type: "ReLU"
+  bottom: "classification_submodel_2/pyramid_classification_3"
+  top: "classification_submodel_2/pyramid_classification_3"
+}
+layer {
+  name: "classification_submodel_3/pyramid_classification_3"
+  type: "Convolution"
+  bottom: "classification_submodel_3/pyramid_classification_2"
+  top: "classification_submodel_3/pyramid_classification_3"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_3/pyramid_classification_3s"
+  type: "ReLU"
+  bottom: "classification_submodel_3/pyramid_classification_3"
+  top: "classification_submodel_3/pyramid_classification_3"
+}
+layer {
+  name: "classification_submodel_4/pyramid_classification_3"
+  type: "Convolution"
+  bottom: "classification_submodel_4/pyramid_classification_2"
+  top: "classification_submodel_4/pyramid_classification_3"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_4/pyramid_classification_3s"
+  type: "ReLU"
+  bottom: "classification_submodel_4/pyramid_classification_3"
+  top: "classification_submodel_4/pyramid_classification_3"
+}
+layer {
+  name: "classification_submodel/pyramid_classification"
+  type: "Convolution"
+  bottom: "classification_submodel/pyramid_classification_3"
+  top: "classification_submodel/pyramid_classification"
+  convolution_param {
+    num_output: 72
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_1/pyramid_classification"
+  type: "Convolution"
+  bottom: "classification_submodel_1/pyramid_classification_3"
+  top: "classification_submodel_1/pyramid_classification"
+  convolution_param {
+    num_output: 72
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_2/pyramid_classification"
+  type: "Convolution"
+  bottom: "classification_submodel_2/pyramid_classification_3"
+  top: "classification_submodel_2/pyramid_classification"
+  convolution_param {
+    num_output: 72
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_3/pyramid_classification"
+  type: "Convolution"
+  bottom: "classification_submodel_3/pyramid_classification_3"
+  top: "classification_submodel_3/pyramid_classification"
+  convolution_param {
+    num_output: 72
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel_4/pyramid_classification"
+  type: "Convolution"
+  bottom: "classification_submodel_4/pyramid_classification_3"
+  top: "classification_submodel_4/pyramid_classification"
+  convolution_param {
+    num_output: 72
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+}
+layer {
+  name: "classification_submodel/pyramid_classification_permute"
+  type: "Permute"
+  bottom: "classification_submodel/pyramid_classification"
+  top: "classification_submodel/pyramid_classification_permute"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "classification_submodel/pyramid_classification_reshape"
+  type: "Reshape"
+  bottom: "classification_submodel/pyramid_classification_permute"
+  top: "classification_submodel/pyramid_classification_reshape"
+  reshape_param {
+    shape {
+      dim: 0
+      dim: -1
+      dim: 8
+    }
+  }
+}
+layer {
+  name: "classification_submodel_1/pyramid_classification_permute"
+  type: "Permute"
+  bottom: "classification_submodel_1/pyramid_classification"
+  top: "classification_submodel_1/pyramid_classification_permute"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "classification_submodel_1/pyramid_classification_reshape"
+  type: "Reshape"
+  bottom: "classification_submodel_1/pyramid_classification_permute"
+  top: "classification_submodel_1/pyramid_classification_reshape"
+  reshape_param {
+    shape {
+      dim: 0
+      dim: -1
+      dim: 8
+    }
+  }
+}
+layer {
+  name: "classification_submodel_2/pyramid_classification_permute"
+  type: "Permute"
+  bottom: "classification_submodel_2/pyramid_classification"
+  top: "classification_submodel_2/pyramid_classification_permute"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "classification_submodel_2/pyramid_classification_reshape"
+  type: "Reshape"
+  bottom: "classification_submodel_2/pyramid_classification_permute"
+  top: "classification_submodel_2/pyramid_classification_reshape"
+  reshape_param {
+    shape {
+      dim: 0
+      dim: -1
+      dim: 8
+    }
+  }
+}
+layer {
+  name: "classification_submodel_3/pyramid_classification_permute"
+  type: "Permute"
+  bottom: "classification_submodel_3/pyramid_classification"
+  top: "classification_submodel_3/pyramid_classification_permute"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "classification_submodel_3/pyramid_classification_reshape"
+  type: "Reshape"
+  bottom: "classification_submodel_3/pyramid_classification_permute"
+  top: "classification_submodel_3/pyramid_classification_reshape"
+  reshape_param {
+    shape {
+      dim: 0
+      dim: -1
+      dim: 8
+    }
+  }
+}
+layer {
+  name: "classification_submodel_4/pyramid_classification_permute"
+  type: "Permute"
+  bottom: "classification_submodel_4/pyramid_classification"
+  top: "classification_submodel_4/pyramid_classification_permute"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "classification_submodel_4/pyramid_classification_reshape"
+  type: "Reshape"
+  bottom: "classification_submodel_4/pyramid_classification_permute"
+  top: "classification_submodel_4/pyramid_classification_reshape"
+  reshape_param {
+    shape {
+      dim: 0
+      dim: -1
+      dim: 8
+    }
+  }
+}
+layer {
+  name: "classification_submodel/pyramid_classification_sigmoid"
+  type: "Sigmoid"
+  bottom: "classification_submodel/pyramid_classification_reshape"
+  top: "classification_submodel/pyramid_classification_reshape"
+}
+layer {
+  name: "classification_submodel_1/pyramid_classification_sigmoid"
+  type: "Sigmoid"
+  bottom: "classification_submodel_1/pyramid_classification_reshape"
+  top: "classification_submodel_1/pyramid_classification_reshape"
+}
+layer {
+  name: "classification_submodel_2/pyramid_classification_sigmoid"
+  type: "Sigmoid"
+  bottom: "classification_submodel_2/pyramid_classification_reshape"
+  top: "classification_submodel_2/pyramid_classification_reshape"
+}
+layer {
+  name: "classification_submodel_3/pyramid_classification_sigmoid"
+  type: "Sigmoid"
+  bottom: "classification_submodel_3/pyramid_classification_reshape"
+  top: "classification_submodel_3/pyramid_classification_reshape"
+}
+layer {
+  name: "classification_submodel_4/pyramid_classification_sigmoid"
+  type: "Sigmoid"
+  bottom: "classification_submodel_4/pyramid_classification_reshape"
+  top: "classification_submodel_4/pyramid_classification_reshape"
+}
+layer {
+  name: "regression"
+  type: "Concat"
+  bottom: "regression_submodel/pyramid_regression_reshape"
+  bottom: "regression_submodel_1/pyramid_regression_reshape"
+  bottom: "regression_submodel_2/pyramid_regression_reshape"
+  bottom: "regression_submodel_3/pyramid_regression_reshape"
+  bottom: "regression_submodel_4/pyramid_regression_reshape"
+  top: "regression"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name: "classification"
+  type: "Concat"
+  bottom: "classification_submodel/pyramid_classification_reshape"
+  bottom: "classification_submodel_1/pyramid_classification_reshape"
+  bottom: "classification_submodel_2/pyramid_classification_reshape"
+  bottom: "classification_submodel_3/pyramid_classification_reshape"
+  bottom: "classification_submodel_4/pyramid_classification_reshape"
+  top: "classification"
+  concat_param {
+    axis: 1
+  }
+}
+

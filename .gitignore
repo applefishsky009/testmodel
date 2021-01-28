@@ -1,0 +1,14 @@
+*.exe
+.vscode/
+*.pdb
+*.ilk
+*.obj
+*.enc
+*.idb
+*.db
+*.opendb
+*.log
+*.tlog
+*.vs
+*.iobj
+*.ipdb
